@@ -9,7 +9,7 @@ const controllerHandler = (app) => {
     // connect to db
     (0, connection_1.connectDB)();
     // handle invalid req
-    app.all("*", (req, res, next) => {
+    app.all(/.*/, (req, res, next) => {
         res.status(404).json({ message: "invalid url :(" });
     });
     //     //=== global error handler ===//
