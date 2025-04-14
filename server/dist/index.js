@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const controller_handler_1 = require("./controller.handler");
+//import { controllerHandler } from "./controller.handler";
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
-(0, controller_handler_1.controllerHandler)(app);
+//controllerHandler(app);
 app.listen(port, () => {
     console.log("server is runing on port:", port);
 });
