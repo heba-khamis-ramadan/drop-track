@@ -1,5 +1,5 @@
 import { Application, json, NextFunction, Request, Response } from "express";
-import { connectDB } from "./DB/connection";
+import { connectDB } from "./DB/db.connection";
 
 export const controllerHandler =  (app: Application) => {
      // parse data from json
