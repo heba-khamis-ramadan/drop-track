@@ -1,4 +1,9 @@
+import { Request } from "express";
 import { Document, Types } from "mongoose";
+
+export interface IAuthRequest extends Request {
+    authUser: IUser;
+};
 
 export interface IUser extends Document  {
     userName: string;

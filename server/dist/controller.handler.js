@@ -12,6 +12,7 @@ const controllerHandler = (app) => {
     app.all(/.*/, (req, res, next) => {
         res.status(404).json({ message: "invalid url :(" });
     });
-    //     //=== global error handler ===//
+    //=== global error handler ===//
+    //app.use(errorService.globalErrorHandler(error: Error,req: Request, res: Response, next: NextFunction));
 };
 exports.controllerHandler = controllerHandler;
