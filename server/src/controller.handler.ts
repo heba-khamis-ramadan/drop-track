@@ -1,6 +1,6 @@
 import { Application, json, NextFunction, Request, Response } from "express";
 import { connectDB } from "./DB/db.connection";
-import errorService from "./Utils/error";
+import errorService, { AppError } from "./Utils/error";
 
 export const controllerHandler =  (app: Application) => {
      // parse data from json
@@ -15,5 +15,5 @@ export const controllerHandler =  (app: Application) => {
      });
 
      //=== global error handler ===//
-     //app.use(errorService.globalErrorHandler(error: Error,req: Request, res: Response, next: NextFunction));
+     app.use(errorService.globalErrorHandler as (error: AppError, req: Request, res: Response, next: NextFunction) => void);
 };
