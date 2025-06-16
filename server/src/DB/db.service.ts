@@ -3,7 +3,7 @@ import { FilterQuery, Model, ProjectionType, QueryOptions, Types } from "mongoos
 export class DBService<T> {
     constructor(private _model:Model<T>) {}
 
-    create(document: T): Promise<T> {
+    create(document: Partial<T>): Promise<T> {
         const newDocument = this._model.create(document);
         return newDocument;
     }
@@ -16,7 +16,7 @@ export class DBService<T> {
         return this._model.findById(id);
     }
 
-    findOne(filter: FilterQuery<T>, projection: ProjectionType<T>, options: QueryOptions) {
+    findOne(filter: FilterQuery<T>, projection?: ProjectionType<T>, options?: QueryOptions): Promise<T | null> {
         return this._model.findOne(filter, projection);
     }
 };
