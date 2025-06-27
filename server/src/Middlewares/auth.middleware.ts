@@ -6,8 +6,8 @@ import User from "../DB/Models/user.model";
 import { AppError } from "../Utils/error";
 
 class AuthMiddlewareService {
-    private _userModel = new DBService<IUser>(User)
-    async authentication(req: IAuthRequest, res: Response, next: NextFunction) {
+    private _userModel = new DBService<IUser>(User);
+    authentication = async(req: IAuthRequest, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
     // access token
     if (!authorization?.startsWith("access")) {
@@ -24,6 +24,8 @@ class AuthMiddlewareService {
 
     // add user to request
     req.authUser = authUser;
+
+    return next();
    }
 
 //    authorization(roles: string[]) {

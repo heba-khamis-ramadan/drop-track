@@ -1,14 +1,14 @@
 import { NextFunction, Response } from "express";
 import { IAuthRequest, IUser } from "../../Utils/common/types";
-import { SignUpDto } from "./auth.dto";
+import { SignUpDto, LogInDto } from "./auth.dto";
 import { DBService } from "../../DB/db.service";
 import User from "../../DB/Models/user.model";
 import { AppError } from "../../Utils/error";
-import { hashSync } from "bcrypt";
+import { compareSync, hashSync } from "bcrypt";
+import tokenService from "./../../Utils/token"
 
 class AuthService {
   private _userModel = new DBService<IUser>(User);
-
   signup = async (req: IAuthRequest, res: Response, next: NextFunction) : Promise<Response | NextFunction> => {
     const { userName, email, password }: SignUpDto = req.body;
     // check if user already exists
@@ -22,11 +22,33 @@ class AuthService {
       email,
       password: hashedPassword
     });
-    return res.status(201).json({ success: true, message: "User created successfully", data: createdUser });
+    return res.status(201).json({ success: true, message: "user created successfully", data: createdUser });
   }
 
-  login = (req: IAuthRequest, res: Response, next: NextFunction) => {
-    // Handle login logic
+  login = async (req: IAuthRequest, res: Response, next: NextFunction) => {
+    const { email, password }: LogInDto = req.body;
+    // check user existance
+    const user = await this._userModel.findOne({ email });
+    if(!user) return next(new AppError("user not found", 404));
+    // check password
+    if(!compareSync(password, user.password)) return next(new AppError("incorrect password", 401));
+    // change loggedout back to true
+    const id = user.id;
+    if(user.isLoggedout == true) {
+        await this._userModel.findByIdAndUpdate(id, {isLoggedout: false});
+    };
+    // generate token
+    const token = tokenService.sign({_id: user._id}, process.env.JWT_KEY as string, {expiresIn: "6h"});
+    return res.status(200).json({ success: true, message: "login successfully", token});
+  }
+
+  logout = async (req: IAuthRequest, res: Response, next: NextFunction) => {
+    // get user data from req
+    const userExistance = req.authUser;
+    const id = userExistance.id;
+    await User.findByIdAndUpdate(id, {isLoggedout: true, LoggedoutAt: Date.now()});
+    // send response
+    return res.status(201).json({success: true, message: "logout successfully"});
   }
 }
 

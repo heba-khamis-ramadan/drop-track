@@ -6,6 +6,10 @@ const userSchema = new Schema<IUser>({
     userName: {type: String, required: true},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
+    isDeleted: {type: Boolean, default: false},
+    isLoggedout: {type: Boolean, default: false},
+    deletedAt: {type: Date},
+    LoggedoutAt: {type: Date},
     pinnedDrops: [{type: Schema.Types.ObjectId, ref: "Drop"}]
 }, 
 {timestamps: true});

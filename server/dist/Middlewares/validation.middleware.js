@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ValidationMiddlewareService = void 0;
 const error_1 = require("../Utils/error");
 class ValidationMiddlewareService {
     isValid(schema) {
@@ -10,6 +11,9 @@ class ValidationMiddlewareService {
                 const errMesgs = result.error.details.map((err) => err.message).join(", ");
                 return next(new error_1.AppError(errMesgs, 400));
             }
+            return next();
         };
     }
 }
+exports.ValidationMiddlewareService = ValidationMiddlewareService;
+exports.default = new ValidationMiddlewareService();

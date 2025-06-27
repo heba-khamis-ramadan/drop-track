@@ -9,6 +9,10 @@ export interface IUser extends Document  {
     userName: string;
     email: string;
     password: string;
+    isDeleted: boolean,
+    isLoggedout: boolean,
+    deletedAt: Date,
+    LoggedoutAt: Date,
     pinnedDrops: Array<Types.ObjectId>
 };
 

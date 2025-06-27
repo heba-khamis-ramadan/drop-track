@@ -18,6 +18,9 @@ class DBService {
     findOne(filter, projection, options) {
         return this._model.findOne(filter, projection);
     }
+    findByIdAndUpdate(id, update, options) {
+        return this._model.findByIdAndUpdate(id, update);
+    }
 }
 exports.DBService = DBService;
 ;

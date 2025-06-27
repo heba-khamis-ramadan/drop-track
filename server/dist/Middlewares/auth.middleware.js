@@ -19,17 +19,7 @@ const error_1 = require("../Utils/error");
 class AuthMiddlewareService {
     constructor() {
         this._userModel = new db_service_1.DBService(user_model_1.default);
-        //    authorization(roles: string[]) {
-        //     return (req: IAuthRequest, res: Response, next: NextFunction) => {
-        //         if(!roles.includes(req.authUser.role)) {
-        //             return next(new AppError("not authorized", 401));
-        //         }
-        //         return next();
-        //     };
-        //    }
-    }
-    authentication(req, res, next) {
-        return __awaiter(this, void 0, void 0, function* () {
+        this.authentication = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const { authorization } = req.headers;
             // access token
             if (!(authorization === null || authorization === void 0 ? void 0 : authorization.startsWith("access"))) {
@@ -44,7 +34,16 @@ class AuthMiddlewareService {
             }
             // add user to request
             req.authUser = authUser;
+            return next();
         });
+        //    authorization(roles: string[]) {
+        //     return (req: IAuthRequest, res: Response, next: NextFunction) => {
+        //         if(!roles.includes(req.authUser.role)) {
+        //             return next(new AppError("not authorized", 401));
+        //         }
+        //         return next();
+        //     };
+        //    }
     }
 }
 exports.default = new AuthMiddlewareService();
