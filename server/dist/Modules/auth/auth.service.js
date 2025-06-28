@@ -47,8 +47,8 @@ class AuthService {
                 return next(new error_1.AppError("incorrect password", 401));
             // change loggedout back to true
             const id = user.id;
-            if (user.isLoggedout == true) {
-                yield this._userModel.findByIdAndUpdate(id, { isLoggedout: false });
+            if (user.isLoggedout || user.isDeleted) {
+                yield this._userModel.findByIdAndUpdate(id, { isLoggedout: false, isDeleted: false });
             }
             ;
             // generate token
@@ -57,11 +57,14 @@ class AuthService {
         });
         this.logout = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             // get user data from req
-            const userExistance = req.authUser;
-            const id = userExistance.id;
-            yield user_model_1.default.findByIdAndUpdate(id, { isLoggedout: true, LoggedoutAt: Date.now() });
+            const user_id = req.authUser.id;
+            // check if user is deleted or logged out user existance
+            const existingUser = yield this._userModel.findById(user_id);
+            if ((existingUser === null || existingUser === void 0 ? void 0 : existingUser.isDeleted) || (existingUser === null || existingUser === void 0 ? void 0 : existingUser.isLoggedout))
+                return next(new error_1.AppError("user not found", 404));
+            yield this._userModel.findByIdAndUpdate(user_id, { isLoggedout: true, isDeleted: true, LoggedoutAt: Date.now() });
             // send response
-            return res.status(201).json({ success: true, message: "logout successfully" });
+            return res.status(200).json({ success: true, message: "logout successfully" });
         });
     }
 }

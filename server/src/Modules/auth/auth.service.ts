@@ -34,8 +34,8 @@ class AuthService {
     if(!compareSync(password, user.password)) return next(new AppError("incorrect password", 401));
     // change loggedout back to true
     const id = user.id;
-    if(user.isLoggedout == true) {
-        await this._userModel.findByIdAndUpdate(id, {isLoggedout: false});
+    if(user.isLoggedout || user.isDeleted) {
+        await this._userModel.findByIdAndUpdate(id, {isLoggedout: false, isDeleted: false});
     };
     // generate token
     const token = tokenService.sign({_id: user._id}, process.env.JWT_KEY as string, {expiresIn: "6h"});
@@ -44,11 +44,13 @@ class AuthService {
 
   logout = async (req: IAuthRequest, res: Response, next: NextFunction) => {
     // get user data from req
-    const userExistance = req.authUser;
-    const id = userExistance.id;
-    await User.findByIdAndUpdate(id, {isLoggedout: true, LoggedoutAt: Date.now()});
+    const user_id = req.authUser.id;
+    // check if user is deleted or logged out user existance
+    const existingUser = await this._userModel.findById(user_id);
+    if(existingUser?.isDeleted || existingUser?.isLoggedout) return next(new AppError("user not found", 404));
+    await this._userModel.findByIdAndUpdate(user_id, {isLoggedout: true, isDeleted: true, LoggedoutAt: Date.now()});
     // send response
-    return res.status(201).json({success: true, message: "logout successfully"});
+    return res.status(200).json({success: true, message: "logout successfully"});
   }
 }
 

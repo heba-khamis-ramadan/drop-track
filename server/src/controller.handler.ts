@@ -12,9 +12,9 @@ export const controllerHandler =  (app: Application) => {
 
     // import controllers
     app.use("/auth", controllers.authController);
-    app.use("/drop", controllers.dropController);
-    app.use("/rating", controllers.ratingController);
-    app.use("/user", controllers.userController);
+    app.use("/drops", controllers.dropController);
+    app.use("/ratings", controllers.ratingController);
+    app.use("/users", controllers.userController);
 
      // handle invalid req
      app.all(/.*/, (req: Request, res: Response, next: NextFunction) => {

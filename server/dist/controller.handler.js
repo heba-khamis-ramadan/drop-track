@@ -48,9 +48,9 @@ const controllerHandler = (app) => {
     (0, db_connection_1.connectDB)();
     // import controllers
     app.use("/auth", controllers.authController);
-    app.use("/drop", controllers.dropController);
-    app.use("/rating", controllers.ratingController);
-    app.use("/user", controllers.userController);
+    app.use("/drops", controllers.dropController);
+    app.use("/ratings", controllers.ratingController);
+    app.use("/users", controllers.userController);
     // handle invalid req
     app.all(/.*/, (req, res, next) => {
         res.status(404).json({ message: "invalid url :(" });
