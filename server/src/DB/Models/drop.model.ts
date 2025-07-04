@@ -18,9 +18,12 @@ const dropSchema = new Schema<IDrop>({
         }
       },
     imageUrls: [{type: {secure_url: {type: String}, public_id: {type: String}}}],
-    addBy: {type: Schema.Types.ObjectId, ref: "User"}
+    addedBy: {type: Schema.Types.ObjectId, ref: "User"}
 }, 
 {timestamps: true});
+
+// Set the geospatial index
+dropSchema.index({ location: '2dsphere' });
 
 // model
 const Drop = model<IDrop>("Drop", dropSchema);

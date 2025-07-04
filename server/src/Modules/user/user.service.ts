@@ -3,8 +3,7 @@ import { IAuthRequest, IUser } from "../../Utils/common/types";
 import { DBService } from "../../DB/db.service";
 import User from "../../DB/Models/user.model";
 import { AppError } from "../../Utils/error";
-import { compareSync, hashSync } from "bcrypt";
-import tokenService from "./../../Utils/token"
+import { UserUpdateDto } from "./user.dto";
 
 class UserService {
   private _userModel = new DBService<IUser>(User);
@@ -22,7 +21,7 @@ class UserService {
         // check if user is deleted or logged out user existance
         const existingUser = await this._userModel.findById(user_id);
         if(existingUser?.isDeleted || existingUser?.isLoggedout) return next(new AppError("user not found", 404));
-        const {userName, email} = req.body;
+        const {userName, email} : UserUpdateDto = req.body;
         const updatedUser = await this._userModel.findByIdAndUpdate(user_id, {userName, email}, {new: true});
         return res.status(200).json({success: true, data: updatedUser});
     }

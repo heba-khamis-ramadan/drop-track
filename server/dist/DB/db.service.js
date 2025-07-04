@@ -9,8 +9,8 @@ class DBService {
         const newDocument = this._model.create(document);
         return newDocument;
     }
-    find(filter) {
-        return this._model.find(filter || {});
+    find(filter = {}) {
+        return this._model.find(filter);
     }
     findById(id) {
         return this._model.findById(id);

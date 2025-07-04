@@ -18,8 +18,10 @@ const dropSchema = new mongoose_1.Schema({
         }
     },
     imageUrls: [{ type: { secure_url: { type: String }, public_id: { type: String } } }],
-    addBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" }
+    addedBy: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" }
 }, { timestamps: true });
+// Set the geospatial index
+dropSchema.index({ location: '2dsphere' });
 // model
 const Drop = (0, mongoose_1.model)("Drop", dropSchema);
 exports.default = Drop;

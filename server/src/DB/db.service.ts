@@ -8,8 +8,8 @@ export class DBService<T> {
         return newDocument;
     }
 
-    find(filter: FilterQuery<T>): Promise<Array<T>> {
-        return this._model.find(filter || {});
+    find(filter: FilterQuery<T> = {}): Promise<Array<T>> {
+        return this._model.find(filter);
     }
 
     findById(id: Types.ObjectId): Promise<T | null> {

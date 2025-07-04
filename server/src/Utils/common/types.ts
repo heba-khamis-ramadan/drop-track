@@ -26,7 +26,7 @@ export interface IDrop extends Document  {
         coordinates: [number, number]; // [longitude, latitude]
       };
     imageUrls: Array<{secure_url: string, public_id: string}>;
-    addBy: Types.ObjectId;
+    addedBy: Types.ObjectId;
 };
 
 export interface IRate extends Document  {

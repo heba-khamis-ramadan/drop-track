@@ -8,7 +8,7 @@ import { signupSchema } from "./auth.schema";
 const authController = Router();
 
 authController.post("/signup",
-    //ValidationMiddlewareService.isValid(signupSchema),
+    ValidationMiddlewareService.isValid(signupSchema),
     ErrorService.asyncHandler(AuthService.signup)
 );
 
