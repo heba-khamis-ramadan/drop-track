@@ -13,6 +13,11 @@ dropController.post("/create",
   ErrorService.asyncHandler(DropService.create_drop)
 );
 
+dropController.get(
+  "/nearby",
+  ErrorService.asyncHandler(DropService.get_near_drops)
+);
+
 dropController.get("/:dropId",ErrorService.asyncHandler(DropService.get_drop));
 
 dropController.get("/", ErrorService.asyncHandler(DropService.get_drops));

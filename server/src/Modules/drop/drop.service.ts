@@ -36,6 +36,31 @@ class DropService {
         if(!drops) return next(new AppError("drops not found", 404));
         return res.status(200).json({success: true, data: drops});
     }
+
+    
+    get_near_drops = async (req: Request, res: Response, next: NextFunction) => {
+        const lng = parseFloat(req.query.lng as string);
+        const lat = parseFloat(req.query.lat as string);
+        const distance = parseInt(req.query.distance as string) || 5000; // meters
+
+        if (isNaN(lng) || isNaN(lat)) {
+          return res.status(400).json({ success: false, message: "Invalid coordinates" });
+        }
+
+        const drops = await this._dropModel.find({
+          location: {
+            $near: {
+              $geometry: {
+                type: "Point",
+                coordinates: [lng, lat]
+              },
+              $maxDistance: distance // in meters
+            }
+          }
+        });
+
+        res.status(200).json({ success: true, data: drops });
+    };
 }
 
   export default new DropService();

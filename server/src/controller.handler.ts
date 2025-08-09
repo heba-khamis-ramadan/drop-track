@@ -10,6 +10,9 @@ export const controllerHandler =  (app: Application) => {
      // connect to db
      connectDB();
 
+     const cors = require('cors');
+     app.use(cors());
+
     // import controllers
     app.use("/auth", controllers.authController);
     app.use("/drops", controllers.dropController);
