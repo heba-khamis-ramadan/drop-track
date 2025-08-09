@@ -46,6 +46,26 @@ class DropService {
                 return next(new error_1.AppError("drops not found", 404));
             return res.status(200).json({ success: true, data: drops });
         });
+        this.get_near_drops = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const lng = parseFloat(req.query.lng);
+            const lat = parseFloat(req.query.lat);
+            const distance = parseInt(req.query.distance) || 5000; // meters
+            if (isNaN(lng) || isNaN(lat)) {
+                return res.status(400).json({ success: false, message: "Invalid coordinates" });
+            }
+            const drops = yield this._dropModel.find({
+                location: {
+                    $near: {
+                        $geometry: {
+                            type: "Point",
+                            coordinates: [lng, lat]
+                        },
+                        $maxDistance: distance // in meters
+                    }
+                }
+            });
+            res.status(200).json({ success: true, data: drops });
+        });
     }
 }
 exports.default = new DropService();

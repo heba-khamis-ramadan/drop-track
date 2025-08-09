@@ -46,6 +46,8 @@ const controllerHandler = (app) => {
     app.use((0, express_1.json)());
     // connect to db
     (0, db_connection_1.connectDB)();
+    const cors = require('cors');
+    app.use(cors());
     // import controllers
     app.use("/auth", controllers.authController);
     app.use("/drops", controllers.dropController);
