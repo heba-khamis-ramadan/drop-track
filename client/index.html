@@ -9,214 +9,39 @@
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
   />
+  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="#">DropTrack</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <!-- Left side nav links -->
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a href="#" class="nav-link active" aria-current="page">Home</a>
-          </li>
-          <li class="nav-item">
-            <a href="/about.html" class="nav-link">About</a>
-          </li>
-          <li class="nav-item">
-            <a href="/contact.html" class="nav-link">Contact</a>
-          </li>
-        </ul>
-      
-        <!-- Right side buttons -->
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-primary" id="login-form-open" data-bs-toggle="modal" data-bs-target="#authModal">Login</button>
-          <button class="btn btn-primary" id="signup-form-open" data-bs-toggle="modal" data-bs-target="#authModal">Signup</button>
-          <a href="explore.html">
-            <button class="btn btn-secondary explpr-drops">Explore Drops</button>
-          </a>
-        </div>
+  <!-- Navbar Component -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Main content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="d-flex align-items-center bg-light">
+      <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-4">Pin Your Favorite Drops Nearby</h1>
+        <p class="lead mb-4 text-secondary">
+          Discover, add, and share your favorite water taps with friends using
+          our easy-to-use app.
+        </p>
+        <a href="explore.html">
+          <button class="btn btn-secondary explpr-drops">Get Started</button>
+        </a>
       </div>
-    </div>
-  </nav>
+    </section>
+  </main>
 
-  <!-- Hero Section -->
-  <section class="vh-100 d-flex align-items-center bg-light">
-    <div class="container text-center">
-      <h1 class="display-4 fw-bold mb-4">Pin Your Favorite Drops Nearby</h1>
-      <p class="lead mb-4 text-secondary">
-        Discover, add, and share your favorite water taps with friends using
-        our easy-to-use app.
-      </p>
-      <a href="explore.html">
-        <button class="btn btn-secondary explpr-drops">Get Started</button>
-      </a>
-    </div>
-  </section>
+  <!-- Footer Component -->
+  <div id="footer-placeholder"></div>
 
-  <!-- Login / Signup Modal -->
-  <div
-    class="modal fade"
-    id="authModal"
-    tabindex="-1"
-    aria-labelledby="authModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="authModalLabel"></h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs" id="authTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link active"
-                id="login-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#login"
-                type="button"
-                role="tab"
-                aria-controls="login"
-                aria-selected="true"
-              >
-                Login
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="signup-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#signup"
-                type="button"
-                role="tab"
-                aria-controls="signup"
-                aria-selected="false"
-              >
-                SignUp
-              </button>
-            </li>
-          </ul>
-  
-          <!-- Tab panes -->
-          <div class="tab-content pt-3" id="authTabContent">
-            <!-- Login Form -->
-            <div
-              class="tab-pane fade show active"
-              id="login"
-              role="tabpanel"
-              aria-labelledby="login-tab"
-            >
-              <form id="loginForm">
-                <div class="mb-3">
-                  <label for="loginEmail" class="form-label">Email address</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="loginEmail"
-                    name="email"
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="loginPassword" class="form-label">Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="loginPassword"
-                    name="password"
-                    placeholder="Enter your password"
-                    required
-                  />
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-              </form>
-            </div>
-  
-            <!-- Signup Form -->
-            <div
-              class="tab-pane fade"
-              id="signup"
-              role="tabpanel"
-              aria-labelledby="signup-tab"
-            >
-              <form id="signupForm">
-                <div class="mb-3">
-                  <label for="signupUserName" class="form-label">User Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="signupUserName"
-                    name="userName"
-                    placeholder="Choose a user name"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="signupEmail" class="form-label">Email address</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="signupEmail"
-                    name="email"
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="signupPassword" class="form-label">Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="signupPassword"
-                    name="password"
-                    placeholder="Create a password"
-                    required
-                  />
-                </div>
-                <button type="submit" class="btn btn-primary w-100">SignUp</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="bg-light text-center py-3 border-top">
-    <div class="container">
-      <small class="text-muted"
-        >&copy; 2025 DropTrack. All rights reserved.</small
-      >
-    </div>
-  </footer>
+  <!-- Auth Modal Component -->
+  <div id="auth-modal-placeholder"></div>
 
   <!-- Bootstrap JS Bundle CDN (Popper + Bootstrap JS) -->
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
   ></script>
+  <script src="js/components.js"></script>
 </body>
 </html>
