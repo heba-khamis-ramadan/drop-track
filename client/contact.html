@@ -22,18 +22,18 @@
         </p>
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <form>
+            <form action="https://formspree.io/f/meolkrbd" method="POST">
               <div class="mb-3">
                 <label class="form-label">Your Name</label>
-                <input type="text" class="form-control" placeholder="Enter your name" required>
+                <input type="text" name="name" class="form-control" placeholder="Enter your name" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">Your Email</label>
-                <input type="email" class="form-control" placeholder="Enter your email" required>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">Message</label>
-                <textarea class="form-control" rows="4" placeholder="Write your message..." required></textarea>
+                <textarea name="message" class="form-control" rows="4" placeholder="Write your message..." required></textarea>
               </div>
               <button type="submit" class="btn btn-primary w-100">Send Message</button>
             </form>
