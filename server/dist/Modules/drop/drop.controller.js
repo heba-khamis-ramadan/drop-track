@@ -14,4 +14,5 @@ dropController.post("/create", error_1.default.asyncHandler(auth_middleware_1.de
 dropController.get("/nearby", error_1.default.asyncHandler(drop_service_1.default.get_near_drops));
 dropController.get("/:dropId", error_1.default.asyncHandler(drop_service_1.default.get_drop));
 dropController.get("/", error_1.default.asyncHandler(drop_service_1.default.get_drops));
+dropController.delete("/:dropId", error_1.default.asyncHandler(drop_service_1.default.delete_drop));
 exports.default = dropController;

@@ -21,6 +21,9 @@ class DBService {
     findByIdAndUpdate(id, update, options) {
         return this._model.findByIdAndUpdate(id, update);
     }
+    findByIdAndDelete(id, options) {
+        return this._model.findByIdAndDelete(id, options);
+    }
 }
 exports.DBService = DBService;
 ;

@@ -66,6 +66,14 @@ class DropService {
             });
             res.status(200).json({ success: true, data: drops });
         });
+        this.delete_drop = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            const { dropId } = req.params;
+            const newDropId = new mongoose_1.Types.ObjectId(dropId);
+            const drop = yield this._dropModel.findByIdAndDelete(newDropId);
+            if (!drop)
+                return next(new error_1.AppError("drop not found", 404));
+            return res.status(200).json({ success: true, data: drop });
+        });
     }
 }
 exports.default = new DropService();

@@ -61,6 +61,14 @@ class DropService {
 
         res.status(200).json({ success: true, data: drops });
     };
+
+    delete_drop = async (req: Request, res: Response, next: NextFunction) => {
+        const { dropId } = req.params;
+        const newDropId = new Types.ObjectId(dropId);
+        const drop = await this._dropModel.findByIdAndDelete(newDropId);
+        if(!drop) return next(new AppError("drop not found", 404));
+        return res.status(200).json({success: true, data: drop});
+    }
 }
 
   export default new DropService();

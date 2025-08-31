@@ -23,4 +23,8 @@ export class DBService<T> {
     findByIdAndUpdate(id: Types.ObjectId, update?: UpdateQuery<T>, options?: QueryOptions): Promise<T | null> {
         return this._model.findByIdAndUpdate(id, update);
     }
+
+    findByIdAndDelete(id: Types.ObjectId, options?: QueryOptions): Promise<T | null> {
+        return this._model.findByIdAndDelete(id, options);
+    }
 };

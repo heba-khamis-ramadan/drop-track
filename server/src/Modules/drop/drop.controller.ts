@@ -22,4 +22,6 @@ dropController.get("/:dropId",ErrorService.asyncHandler(DropService.get_drop));
 
 dropController.get("/", ErrorService.asyncHandler(DropService.get_drops));
 
+dropController.delete("/:dropId",ErrorService.asyncHandler(DropService.delete_drop));
+
 export default dropController;
