@@ -12,10 +12,7 @@
   <link rel="stylesheet" href="css/main.css">
 
   <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
   <style>
     #map {
@@ -28,7 +25,25 @@
   <!-- Navbar Component -->
   <div id="navbar-placeholder"></div>
 
-  <!-- Confirmation Modal -->
+  <!-- Modal to request location -->
+  <div class="modal fade" id="locationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Allow Location Access</h5>
+        </div>
+        <div class="modal-body">
+          <p>📍 This app needs your location to center the map and show nearby drops.</p>
+        </div>
+        <div class="modal-footer">
+          <button id="allowLocationBtn" class="btn btn-primary">Allow Location</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal for pin -->
   <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -43,15 +58,11 @@
               <input type="text" class="form-control" id="dropTitle" required>
             </div>
             <div class="mb-3">
-              <label for="dropImage" class="form-label">Image URL (optional)</label>
-              <input type="text" class="form-control" id="dropImage">
+              <label for="dropAddress" class="form-label">Address</label>
+              <input type="text" class="form-control" id="dropAddress">
             </div>
-            <!-- Hidden inputs to store coordinates -->
             <input type="hidden" id="dropLat">
             <input type="hidden" id="dropLng">
-            <div class="mb-3">
-              <span id="pinCoordinates"></span>
-            </div>
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Add Drop</button>
@@ -61,18 +72,14 @@
       </div>
     </div>
   </div>
+
   <!-- Main content -->
   <main>
-    <!-- Map Card -->
     <div class="container my-4">
       <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Explore Map</h5>
-          <!-- <div class="d-flex">
-            <input type="text" id="searchBox" class="form-control me-2" placeholder="Search for drops">
-          </div> -->
         </div>
-        <!-- Map container -->
         <div class="card-body p-0">
           <div id="map"></div>
         </div>
@@ -81,95 +88,142 @@
   </main>
 
   <!-- Bootstrap JS Bundle -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/components.js"></script>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-  <script>
-    const defaultLat = 30.0444; // Cairo latitude
-    const defaultLng = 31.2357; // Cairo longitude
-    let map;
-    let tempMarker = null;
+<script>
+  let map;
+  let defaultMarker = null;
+  let userMarker = null;
+  const defaultLat = 30.0444; // Cairo
+  const defaultLng = 31.2357;
 
-    function initMap(lat, lng) {
-      map = L.map('map').setView([lat, lng], 13);
+  function initMap(lat, lng, isDefault = true) {
+    if (map) {
+      map.setView([lat, lng], 13);
 
-      // Add OpenStreetMap tiles
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(map);
-
-      // Add marker
-      L.marker([lat, lng])
-        .addTo(map)
-        .bindPopup("📍 Starting Location")
-        .openPopup();
-
-      // Add Pin logic
-      map.on('click', (e) => {
-        const clickedLat = e.latlng.lat;
-        const clickedLng = e.latlng.lng;
-
-        // Update hidden or visible modal input fields
-        document.getElementById("dropLat").value = clickedLat.toFixed(6);
-        document.getElementById("dropLng").value = clickedLng.toFixed(6);
-
-        // Optional: show coordinates in a span for the user
-        document.getElementById("pinCoordinates").textContent =
-          `Lat: ${clickedLat.toFixed(5)}, Lng: ${clickedLng.toFixed(5)}`;
-
-        // Show the modal
-        const pinModal = new bootstrap.Modal(document.getElementById("pinModal"));
-        pinModal.show();
-
-        console.log("Pin created at:", clickedLat, clickedLng);
-        // Optionally send to backend
-      });
-
-      // Load existing drops from backend
-      fetch('http://127.0.0.1:3000/drops')
-        .then((res) => {
-          if (!res.ok) throw new Error('Failed to fetch drops');
-          return res.json();
-        })
-        .then(response => {
-          const drops = response.data;
-          drops.forEach((drop) => {
-            const lat = drop.location.coordinates[1];
-            const lng = drop.location.coordinates[0];
-            const marker = L.marker([lat, lng]).addTo(map);
-            marker.bindPopup(`
-              <strong>${drop.dropName || 'Unnamed drop'}</strong><br/>
-              ${drop.address || 'No address provided'}
-            `);
-          });
-        })
-        .catch((error) => {
-          console.error('Error loading drops:', error);
-          alert('Could not load drops on the map.');
-        });
-    }
-
-    // Try geolocation first
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          initMap(position.coords.latitude, position.coords.longitude);
-        },
-        (error) => {
-          console.warn("Could not get location, defaulting to Cairo:", error);
-          initMap(defaultLat, defaultLng);
+      if (!isDefault) {
+        if (defaultMarker) {
+          map.removeLayer(defaultMarker);
+          defaultMarker = null;
         }
-      );
-    } else {
-      console.warn("Geolocation not supported, defaulting to Cairo");
-      initMap(defaultLat, defaultLng);
+        if (userMarker) {
+          map.removeLayer(userMarker);
+        }
+        userMarker = L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup("📍 You are here")
+          .openPopup();
+      }
+      return;
     }
 
-  </script>
+    // Create map
+    map = L.map('map').setView([lat, lng], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    if (isDefault) {
+      defaultMarker = L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup("📍 Default Location")
+        .openPopup();
+    } else {
+      userMarker = L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup("📍 You are here")
+        .openPopup();
+    }
+
+    // Pin logic
+    map.on('click', (e) => {
+      document.getElementById("dropLat").value = e.latlng.lat.toFixed(6);
+      document.getElementById("dropLng").value = e.latlng.lng.toFixed(6);
+
+      const pinModal = new bootstrap.Modal(document.getElementById("pinModal"));
+      pinModal.show();
+    });
+
+    // Load existing drops
+    fetch('http://127.0.0.1:3000/drops')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch drops');
+        return res.json();
+      })
+      .then(response => {
+        const drops = response.data;
+        drops.forEach((drop) => {
+          const lat = drop.location.coordinates[1];
+          const lng = drop.location.coordinates[0];
+          const marker = L.marker([lat, lng]).addTo(map);
+
+          marker.bindPopup(`
+            <strong>${drop.dropName || 'Unnamed drop'}</strong><br/>
+            ${drop.address || 'No address provided'}<br/>
+            <button class="btn btn-sm btn-danger mt-2 delete-drop" data-id="${drop._id}">
+              Delete
+            </button>
+          `);
+
+          marker.on("popupopen", () => {
+            const popupEl = marker.getPopup().getElement();
+            const btn = popupEl.querySelector(".delete-drop");
+            if (btn) {
+              btn.addEventListener("click", () => {
+                if (confirm("Are you sure you want to delete this drop?")) {
+                  fetch(`http://127.0.0.1:3000/drops/${drop._id}`, { method: "DELETE" })
+                    .then(res => {
+                      if (!res.ok) throw new Error("Failed to delete drop");
+                      map.removeLayer(marker);
+                      alert("Drop deleted successfully!");
+                    })
+                    .catch(err => {
+                      console.error("Error deleting drop:", err);
+                      alert("Could not delete drop.");
+                    });
+                }
+              });
+            }
+          });
+        });
+      })
+      .catch((error) => {
+        console.error('Error loading drops:', error);
+      });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initMap(defaultLat, defaultLng, true);
+
+    const locationModal = new bootstrap.Modal(document.getElementById("locationModal"));
+    locationModal.show();
+
+    document.getElementById("allowLocationBtn").addEventListener("click", () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            initMap(position.coords.latitude, position.coords.longitude, false);
+            locationModal.hide();
+          },
+          (error) => {
+            console.warn("Geolocation denied or failed:", error);
+            alert("Could not access your location, staying at Cairo.");
+            locationModal.hide();
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      } else {
+        alert("Geolocation not supported, staying at Cairo.");
+        locationModal.hide();
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
