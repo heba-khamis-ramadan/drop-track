@@ -87,143 +87,21 @@
     </div>
   </main>
 
+  <!-- Footer Component -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Auth Modal Component -->
+  <div id="auth-modal-placeholder"></div>
+
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/components.js"></script>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<script>
-  let map;
-  let defaultMarker = null;
-  let userMarker = null;
-  const defaultLat = 30.0444; // Cairo
-  const defaultLng = 31.2357;
-
-  function initMap(lat, lng, isDefault = true) {
-    if (map) {
-      map.setView([lat, lng], 13);
-
-      if (!isDefault) {
-        if (defaultMarker) {
-          map.removeLayer(defaultMarker);
-          defaultMarker = null;
-        }
-        if (userMarker) {
-          map.removeLayer(userMarker);
-        }
-        userMarker = L.marker([lat, lng])
-          .addTo(map)
-          .bindPopup("📍 You are here")
-          .openPopup();
-      }
-      return;
-    }
-
-    // Create map
-    map = L.map('map').setView([lat, lng], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    if (isDefault) {
-      defaultMarker = L.marker([lat, lng])
-        .addTo(map)
-        .bindPopup("📍 Default Location")
-        .openPopup();
-    } else {
-      userMarker = L.marker([lat, lng])
-        .addTo(map)
-        .bindPopup("📍 You are here")
-        .openPopup();
-    }
-
-    // Pin logic
-    map.on('click', (e) => {
-      document.getElementById("dropLat").value = e.latlng.lat.toFixed(6);
-      document.getElementById("dropLng").value = e.latlng.lng.toFixed(6);
-
-      const pinModal = new bootstrap.Modal(document.getElementById("pinModal"));
-      pinModal.show();
-    });
-
-    // Load existing drops
-    fetch('http://127.0.0.1:3000/drops')
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch drops');
-        return res.json();
-      })
-      .then(response => {
-        const drops = response.data;
-        drops.forEach((drop) => {
-          const lat = drop.location.coordinates[1];
-          const lng = drop.location.coordinates[0];
-          const marker = L.marker([lat, lng]).addTo(map);
-
-          marker.bindPopup(`
-            <strong>${drop.dropName || 'Unnamed drop'}</strong><br/>
-            ${drop.address || 'No address provided'}<br/>
-            <button class="btn btn-sm btn-danger mt-2 delete-drop" data-id="${drop._id}">
-              Delete
-            </button>
-          `);
-
-          marker.on("popupopen", () => {
-            const popupEl = marker.getPopup().getElement();
-            const btn = popupEl.querySelector(".delete-drop");
-            if (btn) {
-              btn.addEventListener("click", () => {
-                if (confirm("Are you sure you want to delete this drop?")) {
-                  fetch(`http://127.0.0.1:3000/drops/${drop._id}`, { method: "DELETE" })
-                    .then(res => {
-                      if (!res.ok) throw new Error("Failed to delete drop");
-                      map.removeLayer(marker);
-                      alert("Drop deleted successfully!");
-                    })
-                    .catch(err => {
-                      console.error("Error deleting drop:", err);
-                      alert("Could not delete drop.");
-                    });
-                }
-              });
-            }
-          });
-        });
-      })
-      .catch((error) => {
-        console.error('Error loading drops:', error);
-      });
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    initMap(defaultLat, defaultLng, true);
-
-    const locationModal = new bootstrap.Modal(document.getElementById("locationModal"));
-    locationModal.show();
-
-    document.getElementById("allowLocationBtn").addEventListener("click", () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            initMap(position.coords.latitude, position.coords.longitude, false);
-            locationModal.hide();
-          },
-          (error) => {
-            console.warn("Geolocation denied or failed:", error);
-            alert("Could not access your location, staying at Cairo.");
-            locationModal.hide();
-          },
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
-      } else {
-        alert("Geolocation not supported, staying at Cairo.");
-        locationModal.hide();
-      }
-    });
-  });
-</script>
+  <script src="js/explore.js"></script>
 
 </body>
 </html>

@@ -8,6 +8,7 @@ const joi_1 = __importDefault(require("joi"));
 exports.dropSchema = joi_1.default.object({
     dropName: joi_1.default.string().required().max(100),
     tag: joi_1.default.string().optional().max(50),
+    address: joi_1.default.string().optional().max(300),
     location: joi_1.default.object({
         type: joi_1.default.string().valid("Point").required(),
         coordinates: joi_1.default.array()

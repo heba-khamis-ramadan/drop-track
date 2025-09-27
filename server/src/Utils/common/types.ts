@@ -20,6 +20,7 @@ export interface IUser extends Document  {
 export interface IDrop extends Document  {
     dropName: string;
     tag: string;
+    address: string;
     ratings: Array<Types.ObjectId>;
     location: {
         type: "Point"; // GeoJSON type

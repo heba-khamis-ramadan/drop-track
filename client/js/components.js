@@ -77,20 +77,18 @@ class ComponentLoader {
   static handleFormSubmissions() {
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
-
+  
     if (loginForm) {
       loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log('Login form submitted');
+        login(); // call your login() function from auth.js
       });
     }
-
+  
     if (signupForm) {
       signupForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        // Handle signup logic here
-        console.log('Signup form submitted');
+        register(); // call your register() function from auth.js
       });
     }
   }

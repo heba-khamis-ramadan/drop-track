@@ -53,7 +53,7 @@ class AuthService {
             ;
             // generate token
             const token = token_1.default.sign({ _id: user._id }, process.env.JWT_KEY, { expiresIn: "6h" });
-            return res.status(200).json({ success: true, message: "login successfully", token });
+            return res.status(200).json({ success: true, message: "login successfully", token, userName: user.userName });
         });
         this.logout = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             // get user data from req

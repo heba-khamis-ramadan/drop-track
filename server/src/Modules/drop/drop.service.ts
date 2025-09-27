@@ -11,13 +11,14 @@ class DropService {
 
     create_drop = async (req: IAuthRequest, res: Response, next: NextFunction) => {
         const user_id = req.authUser.id;
-        const { dropName, tag, location, imageUrls } : CreateDropDto =  req.body;
+        const { dropName, tag, location, imageUrls, address } : CreateDropDto =  req.body;
         // create new drop
         const drop = await this._dropModel.create({
             dropName, 
             tag, 
             location, 
             imageUrls,
+            address,
             addedBy: user_id
         });
         return res.status(201).json({ success: true, message: "drop created successfully", data: drop });

@@ -13,6 +13,7 @@ export interface LocationDTO {
 export interface CreateDropDto {
   dropName: string;
   tag?: string;
+  address?: string;
   location: LocationDTO;
   imageUrls: IImageUrl[];
   addedBy: Types.ObjectId;

@@ -5,6 +5,7 @@ const mongoose_1 = require("mongoose");
 const dropSchema = new mongoose_1.Schema({
     dropName: { type: String, required: true },
     tag: { type: String },
+    address: { type: String },
     ratings: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Rate" }],
     location: {
         type: {

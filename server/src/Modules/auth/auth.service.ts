@@ -39,7 +39,7 @@ class AuthService {
     };
     // generate token
     const token = tokenService.sign({_id: user._id}, process.env.JWT_KEY as string, {expiresIn: "6h"});
-    return res.status(200).json({ success: true, message: "login successfully", token});
+    return res.status(200).json({ success: true, message: "login successfully", token, userName: user.userName});
   }
 
   logout = async (req: IAuthRequest, res: Response, next: NextFunction) => {

@@ -5,6 +5,7 @@ import { IDrop } from "../../Utils/common/types";
 const dropSchema = new Schema<IDrop>({
     dropName: {type: String, required: true},
     tag: {type: String},
+    address: {type: String},
     ratings: [{type: Schema.Types.ObjectId, ref: "Rate"}],
     location: {
         type: {

@@ -4,6 +4,7 @@ import { IDrop } from "../../Utils/common/types";
 export const dropSchema = joi.object<IDrop>({
     dropName: joi.string().required().max(100),
     tag: joi.string().optional().max(50),
+    address: joi.string().optional().max(300),
     location: joi.object({
       type: joi.string().valid("Point").required(),
       coordinates: joi.array()

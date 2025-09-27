@@ -29,12 +29,17 @@
       </ul>
     
       <!-- Right side buttons -->
-      <div class="d-flex gap-2">
+      <div class="d-flex gap-2" id="auth-buttons">
         <button class="btn btn-outline-primary" id="login-form-open" data-bs-toggle="modal" data-bs-target="#authModal">Login</button>
         <button class="btn btn-primary" id="signup-form-open" data-bs-toggle="modal" data-bs-target="#authModal">Signup</button>
         <a href="explore.html">
           <button class="btn btn-secondary explpr-drops">Explore Drops</button>
         </a>
+      </div>
+
+      <div class="d-flex gap-2 d-none" id="user-buttons">
+        <span class="nav-link fw-bold" id="welcome-message"></span>
+        <button class="btn btn-danger" id="logout-button">Logout</button>
       </div>
     </div>
   </div>

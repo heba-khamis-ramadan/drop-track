@@ -21,13 +21,14 @@ class DropService {
         this._dropModel = new db_service_1.DBService(drop_model_1.default);
         this.create_drop = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const user_id = req.authUser.id;
-            const { dropName, tag, location, imageUrls } = req.body;
+            const { dropName, tag, location, imageUrls, address } = req.body;
             // create new drop
             const drop = yield this._dropModel.create({
                 dropName,
                 tag,
                 location,
                 imageUrls,
+                address,
                 addedBy: user_id
             });
             return res.status(201).json({ success: true, message: "drop created successfully", data: drop });
