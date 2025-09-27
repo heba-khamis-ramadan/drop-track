@@ -56,6 +56,48 @@ async function login() {
   }
 }
 
+async function logout() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    updateNavbarOnLogout();
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/auth/logout`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `access ${token}` // send token
+      }
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // Clear storage on successful logout
+      localStorage.removeItem("token");
+      localStorage.removeItem("userName");
+      updateNavbarOnLogout();
+      alert("You have been logged out.");
+    } else {
+      // Even if server logout fails, clear local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("userName");
+      updateNavbarOnLogout();
+      alert(data.message || "Logout failed, but you have been logged out locally.");
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
+    // If network fails, still clear local storage
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    updateNavbarOnLogout();
+    alert("Network error during logout, but you have been logged out locally.");
+  }
+}
+
 function updateNavbarOnLogin(userName) {
   const authButtons = document.getElementById("auth-buttons");
   const userButtons = document.getElementById("user-buttons");
@@ -101,9 +143,8 @@ function initializeAuthState() {
   const logoutBtn = document.getElementById("logout-button");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("userName");
-      updateNavbarOnLogout();
+      // Just call logout() - it handles everything
+      logout();
     });
   }
 }
