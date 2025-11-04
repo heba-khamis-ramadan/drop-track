@@ -29,6 +29,13 @@
 
 ---
 
+## 🌐 Live Demo
+
+Frontend: [https://drop-track.vercel.app/](https://drop-track-sable.vercel.app/)  
+Backend API: [https://drop-track.onrender.com/](https://drop-track-4ywu.onrender.com/)
+
+---
+
 ## 🧭 Future Improvements
 
 - Improve UI 
